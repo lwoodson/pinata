@@ -12,7 +12,33 @@ module Pinata
     attr_reader :whacker
     attr_accessor :outcome
     def initialize(whacker)
-      whacker = whacker
+      @whacker = whacker
+    end
+
+    def improved?
+      outcome > 0
+    end
+
+    def regressed?
+      outcome < 0
+    end
+
+    def unchanged?
+      outcome == 0
+    end
+  end
+
+  class Regressions
+    def initialize
+      @data = {}
+    end
+
+    def offer(result)
+      @data[result.whacker] = result if result.regressed?
+    end
+
+    def [](key)
+      @data[key]
     end
   end
 end
