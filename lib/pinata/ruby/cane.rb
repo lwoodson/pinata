@@ -1,8 +1,6 @@
 module Pinata
   module Ruby
     class Cane
-      attr_accessor :previous_filepath, :current_filepath, :previous_results,
-                    :current_results, :previous_status, :current_status
       def self.whack(code_change)
         ResultOfWhacking.new(self).tap do |result|
           previous_violations = whack_on(code_change.previous_filepath)
