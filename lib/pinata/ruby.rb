@@ -1,0 +1,1 @@
+require 'pinata/ruby/cane'

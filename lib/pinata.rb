@@ -1,5 +1,8 @@
-require "pinata/version"
+require 'english'
+require 'open3'
+require 'pinata/version'
+require 'pinata/ruby'
 
 module Pinata
-  # Your code goes here...
+  class UnableToParseResults < StandardError; end
 end
