@@ -3,27 +3,22 @@ module Pinata
     class Cane
       attr_accessor :previous_filepath, :current_filepath, :previous_results,
                     :current_results, :previous_status, :current_status
-      def whack
-        @previous_results, previous_status = whack_on previous_filepath
-        @current_results, current_status = whack_on current_filepath
-        previous_violations <=> current_violations
+      def self.whack(code_change)
+        ResultOfWhacking.new(whacker: self.name).tap do |result|
+          previous_violations = whack_on(code_change.previous_filepath)
+          current_violations = whack_on(code_change.current_filepath)
+          result.outcome = previous_violations <=> current_violations
+        end
       rescue StandardError => e
-        raise Pinata::UnableToParseResults.new(e)
+        raise Pinata::WhackerFailed.new(e)
       end
 
-      def whack_on(filepath)
-        Open3.capture2e("cane -f #{filepath}")
+      def self.whack_on(filepath)
+        output, status = Open3.capture2e("cane -f #{filepath}")
+        violations_in output
       end
 
-      def previous_violations
-        @previous_violations ||= violations_in previous_results
-      end
-
-      def current_violations
-        @current_violations ||= violations_in current_results
-      end
-
-      def violations_in(result)
+      def self.violations_in(result)
         result[/Total Violations: \d+/].split(':')[1].strip.to_i
       end
     end

@@ -3,25 +3,25 @@ require 'spec_helper'
 describe Pinata::Ruby::Cane do
   describe "#whack" do
     it "should return 1 when code has improved" do
-      subject.previous_filepath = source_file('craptacular.rb')
-      subject.current_filepath = source_file('elegant.rb') 
-      subject.whack.should == 1
+      code_change = Pinata::CodeChange.new(source_file('craptacular.rb'), source_file('elegant.rb'))
+      result = Pinata::Ruby::Cane.whack(code_change)
+      result.outcome.should == 1
     end
 
     it "should return -1 when code has degraded" do
-      subject.previous_filepath = source_file('elegant.rb')
-      subject.current_filepath = source_file('craptacular.rb')
-      subject.whack.should == -1
+      code_change = Pinata::CodeChange.new(source_file('elegant.rb'), source_file('craptacular.rb'))
+      result = Pinata::Ruby::Cane.whack(code_change)
+      result.outcome.should == -1
     end
 
     it "should return 0 when code has stayed the same" do
-      subject.previous_filepath = source_file('craptacular.rb')
-      subject.current_filepath = source_file('craptacular.rb')
-      subject.whack.should == 0
+      code_change = Pinata::CodeChange.new(source_file('elegant.rb'), source_file('elegant.rb'))
+      result = Pinata::Ruby::Cane.whack(code_change)
+      result.outcome.should == 0
     end
 
     it "should raise UnableToParseResults if files don't exist." do
-      expect{ subject.whack }.to raise_error(Pinata::UnableToParseResults)
+      expect{ Pinata::Ruby::Cane.whack(nil) }.to raise_error(Pinata::WhackerFailed)
     end
   end
 end
