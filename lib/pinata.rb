@@ -3,11 +3,15 @@ require 'open3'
 require 'pinata/version'
 require 'pinata/ruby'
 
+require 'pinata/filetypes'
+
 module Pinata
   class WhackerFailed < StandardError; end
 
   # Represents a change in code
-  CodeChange = Struct.new(:previous_filepath, :current_filepath)
+  class CodeChange
+    attr_accessor :relative_filepath, :previous_filepath, :current_filepath
+  end
 
   # The result of whacking the pinata that is your code by a specific
   # whacker for some sort of code inspection tool.
