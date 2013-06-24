@@ -3,37 +3,44 @@ require 'git'
 module Pinata
   module SCM
     module Git
-      def self.modified_files
-        diff = git.diff(local_branch, remote_branch(local_branch))
-        diff.stats[:files].keys
-      end
+      class << self
+        # Returns the underlying repository interface.
+        def repo(dir='.')
+          @git ||= ::Git.open(dir)
+        end
 
-      def self.current_branch
-        git.branch.name
-      end
+        alias_method :git, :repo
 
-      def self.git(dir='.')
-        @git ||= ::Git.open(dir)
-      end
+        # Returns the name of the current branch.
+        def current_branch
+          git.branch.name
+        end
 
-      private
-      def self.local_branch
-        git.branches.local.find{|branch| branch.current}
-      end
+        # Returns all files modified between the local and remote branches
+        def modified_files
+          diff = git.diff(local_branch, remote_branch(local_branch))
+          diff.stats[:files].keys
+        end
 
-      def self.remote_branch(local)
-        remotes = git.branches.remote.to_a
-        remotes.reject(&pointers).find(&remote_of(local))
-      end
+        private
+        def local_branch
+          git.branches.local.find{|branch| branch.current}
+        end
 
-      # Identifies remotes/origin/HEAD -> origin/master named branches
-      # that we have to avoid (not sure why)
-      def self.pointers
-        lambda {|branch| branch.full[/->/]}
-      end
+        def remote_branch(local)
+          remotes = git.branches.remote.to_a
+          remotes.reject(&pointers).find(&remote_of(local))
+        end
 
-      def self.remote_of(local)
-        lambda {|branch| branch.full.split('/')[-1] == local.name}
+        # Identifies remotes/origin/HEAD -> origin/master named branches
+        # that we have to avoid (not sure why)
+        def pointers
+          lambda {|branch| branch.full[/->/]}
+        end
+
+        def remote_of(local)
+          lambda {|branch| branch.full.split('/')[-1] == local.name}
+        end
       end
     end
   end
