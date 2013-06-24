@@ -5,7 +5,7 @@ module Pinata
     module Git
       def self.current_branch
         git.branch.name 
-        end
+      end
 
       def self.git(dir='.')
         @git ||= ::Git.open(dir)
