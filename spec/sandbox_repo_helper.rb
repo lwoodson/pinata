@@ -12,6 +12,21 @@ module SandboxRepoHelper
     def initialize(git)
       super(git)
     end
+
+    def refactor_player_to_not_suck
+      File.open('player.rb', 'w') do |source_file|
+        source = <<-EOS
+class Player
+  attr_accessor :name
+  def initialize(name)
+    @name = name
+  end
+end
+        EOS
+        source_file.write(source.strip)
+        commit_all('refactoring Player to not suck')
+      end
+    end
   end
 
   def in_sandbox(&block)

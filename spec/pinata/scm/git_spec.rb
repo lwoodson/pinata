@@ -14,11 +14,20 @@ describe Pinata::SCM::Git do
     end
   end
 
-  describe "#local_modifications" do
+  describe "#modified_files" do
     context "when local and remote head are in sync"  do
       it "should return an empty Array" do
         in_sandbox do |git|
-          Pinata::SCM::Git.local_modifications.should == []
+          Pinata::SCM::Git.modified_files.should == []
+        end
+      end
+    end
+
+    context "when local has commits not in remote" do
+      it "should return an Array containing the changed file names" do
+        in_sandbox do |git|
+          git.refactor_player_to_not_suck
+          Pinata::SCM::Git.modified_files.should == ['player.rb']
         end
       end
     end
