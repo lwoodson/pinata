@@ -2,14 +2,10 @@ require 'git'
 
 module Pinata
   module SCM
-    module Git
-      def self.current_branch
-        git.branch.name 
-      end
-
-      def self.git(dir='.')
-        @git ||= ::Git.open(dir)
-      end
+    def self.scm(dir='.')
+      # TODO flesh out more, only supporting git right now
+      require 'pinata/scm/git'
+      @scm ||= Pinata::SCM::Git
     end
   end
 end

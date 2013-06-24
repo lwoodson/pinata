@@ -20,6 +20,7 @@ module SandboxRepoHelper
     git = SandboxGit.new(Git.clone(SANDBOX_GITHUB, sandbox))
     git.checkout(SANDBOX_START_BRANCH)
     git.reset(SANDBOX_START_SHA)
+    FileUtils.cd(sandbox)
     block.call(git)
   end
 end
