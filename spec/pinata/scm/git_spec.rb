@@ -37,7 +37,8 @@ describe Pinata::SCM::Git do
     it "should return the contents of the local file" do
       in_sandbox do |git|
         git.refactor_player_to_not_suck
-        Pinata::SCM::Git.local_contents_of('player.rb').should == GOOD_PLAYER_CONTENTS
+        contents = Pinata::SCM::Git.local_contents_of('player.rb')
+        contents.should == SandboxRepoHelper::GOOD_PLAYER_CONTENTS
       end
     end
   end

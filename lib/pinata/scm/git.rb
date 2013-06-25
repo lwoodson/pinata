@@ -25,6 +25,10 @@ module Pinata
           diff.stats[:files].keys
         end
 
+        # Returns the contents of the local head of current branch.
+        def local_contents_of(file)
+          local_branch.gcommit.gtree.blobs[file].contents
+
         private
         def local_branch
           git.branches.local.find{|branch| branch.current}

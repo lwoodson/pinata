@@ -7,6 +7,15 @@ module SandboxRepoHelper
   SANDBOX_GITHUB='git@github.com:lwoodson/pinata-test-repo.git'
   SANDBOX_START_BRANCH='master'
   SANDBOX_START_SHA='621752d1cfa9f34c3fea4eafeb9f3c2621541031'
+  GOOD_PLAYER_CONTENTS = <<-EOS
+class Player
+  attr_accessor :name
+  def initialize(name)
+    @name = name
+  end
+end
+EOS
+  GOOD_PLAYER_CONTENTS.strip!
 
   class SandboxGit < ::SimpleDelegator
     def initialize(git)
@@ -15,17 +24,9 @@ module SandboxRepoHelper
 
     def refactor_player_to_not_suck
       File.open('player.rb', 'w') do |source_file|
-        source = <<-EOS
-class Player
-  attr_accessor :name
-  def initialize(name)
-    @name = name
-  end
-end
-        EOS
-        source_file.write(source.strip)
-        commit_all('refactoring Player to not suck')
+        source_file.write(SandboxRepoHelper::GOOD_PLAYER_CONTENTS)
       end
+      commit_all('refactoring Player to not suck')
     end
   end
 
