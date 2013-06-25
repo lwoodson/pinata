@@ -27,9 +27,19 @@ module Pinata
 
         # Returns the contents of the local head of current branch.
         def local_contents_of(file)
-          local_branch.gcommit.gtree.blobs[file].contents
+          contents_of(local_branch, file)
+        end
+
+        # Returns the remote contents of the remote head of current branch
+        def remote_contents_of(file)
+          contents_of(remote_branch(local_branch), file)
+        end
 
         private
+        def contents_of(branch, file)
+          branch.gcommit.gtree.blobs[file].contents
+        end
+
         def local_branch
           git.branches.local.find{|branch| branch.current}
         end
