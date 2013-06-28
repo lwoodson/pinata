@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'sandbox_repo_helper'
+require 'sandboxes/git_repo_helper'
 require 'pinata/scm/git'
 
 describe Pinata::SCM::Git do
-  include SandboxRepoHelper
+  include GitRepoHelper
 
   describe "#current_branch" do
     it "should return the currently checked out branch" do
@@ -38,7 +38,7 @@ describe Pinata::SCM::Git do
       in_sandbox do |git|
         git.refactor_player_to_not_suck
         contents = Pinata::SCM::Git.local_contents_of('player.rb')
-        contents.should == SandboxRepoHelper::GOOD_PLAYER_CONTENTS
+        contents.should == GitRepoHelper::GOOD_PLAYER_CONTENTS
       end
     end
   end

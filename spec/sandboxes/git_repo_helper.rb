@@ -3,7 +3,7 @@ require 'tmpdir'
 require 'fileutils'
 require 'delegate'
 
-module SandboxRepoHelper
+module GitRepoHelper
   SANDBOX_GITHUB='git@github.com:lwoodson/pinata-test-repo.git'
   SANDBOX_START_BRANCH='master'
   SANDBOX_START_SHA='621752d1cfa9f34c3fea4eafeb9f3c2621541031'
@@ -24,7 +24,7 @@ EOS
 
     def refactor_player_to_not_suck
       File.open('player.rb', 'w') do |source_file|
-        source_file.write(SandboxRepoHelper::GOOD_PLAYER_CONTENTS)
+        source_file.write(GitRepoHelper::GOOD_PLAYER_CONTENTS)
       end
       commit_all('refactoring Player to not suck')
     end

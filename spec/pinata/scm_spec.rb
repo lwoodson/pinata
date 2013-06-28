@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'sandbox_repo_helper'
+require 'sandboxes/git_repo_helper'
 
 describe Pinata::SCM do
-  include SandboxRepoHelper
+  include GitRepoHelper
   describe "#scm" do
     it "should return Pinata::SCM::Git when encountering a Git project" do
       in_sandbox do
