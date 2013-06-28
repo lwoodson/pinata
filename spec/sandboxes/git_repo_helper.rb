@@ -16,6 +16,7 @@ class Player
 end
 EOS
   GOOD_PLAYER_CONTENTS.strip!
+  BAD_PLAYER_CONTENTS = "class Player; def initialize(name) @name = name; end; end;     "
 
   class SandboxGit < ::SimpleDelegator
     def initialize(git)

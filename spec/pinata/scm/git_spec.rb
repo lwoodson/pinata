@@ -46,7 +46,7 @@ describe Pinata::SCM::Git do
   describe "#remote_content_of" do
     it "should return the contents of the remote file" do
       in_sandbox do |git|
-        expected = "class Player; def initialize(name) @name = name; end; end;     "
+        expected = GitRepoHelper::BAD_PLAYER_CONTENTS
         git.refactor_player_to_not_suck
         contents = Pinata::SCM::Git.remote_contents_of('player.rb').should
         contents.should == expected
