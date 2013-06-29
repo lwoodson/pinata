@@ -20,11 +20,12 @@ module Pinata
       # Starts all the angry kids whacking on your file to see
       # if any new candy regressions spill out.
       def start_whacking(code_change)
-        Pinata::Regressions.new.tap do |regressions|
-          whackers.each do |whacker|
-            regressions.offer(whacker.whack(code_change))
-          end
-        end
+        whackers.map(&whack(code_change))
+      end
+
+      private
+      def whack(code_change)
+        lambda {|whacker| whacker.whack(code_change)}
       end
     end
   end

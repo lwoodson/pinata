@@ -17,6 +17,7 @@ end
 EOS
   GOOD_PLAYER_CONTENTS.strip!
   BAD_PLAYER_CONTENTS = "class Player; def initialize(name) @name = name; end; end;     "
+  BAD_TENNIS_MATCH_CONTENTS = 'class TennisMatch; def start; puts "Ooh, we are going to play us some tennis, yes we are.  Hahaha we are going to watch the most amazing display of non-athleticism ever."; end; end'
 
   class SandboxGit < ::SimpleDelegator
     def initialize(git)
@@ -28,6 +29,13 @@ EOS
         source_file.write(GitRepoHelper::GOOD_PLAYER_CONTENTS)
       end
       commit_all('refactoring Player to not suck')
+    end
+
+    def refactor_tennis_match_to_suck
+      File.open('tennis-match.rb', 'w') do |source_file|
+        source_file.write(GitRepoHelper::BAD_TENNIS_MATCH_CONTENTS)
+      end
+      commit_all('refactoring TennisMatch to suck')
     end
   end
 
