@@ -1,5 +1,3 @@
-require 'english'
-require 'open3'
 require 'pinata/version'
 require 'pinata/models'
 require 'pinata/scm'
