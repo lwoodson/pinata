@@ -1,5 +1,6 @@
 require 'pinata'
 require 'pry'
+require 'tmpdir'
 
 def source_file(name)
   File.join('spec', 'source', name)
@@ -23,4 +24,8 @@ end
 
 def static_ruby_code_change
   ruby_code_change('elegant', 'elegant')
+end
+
+def code_change_with_no_result
+  ruby_code_change('empty', 'empty')
 end

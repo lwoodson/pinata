@@ -18,7 +18,13 @@ module Pinata
       end
 
       def self.violations_in(result)
-        result[/Total Violations: \d+/].split(':')[1].strip.to_i
+        violations_line = result[/Total Violations: \d+/]
+        if violations_line
+          discard, violations = violations_line.split(':')
+          violations = violations.strip.to_i
+        else
+          0
+        end
       end
     end
   end

@@ -17,8 +17,13 @@ describe Pinata::Ruby::Cane do
       result.outcome.should == 0
     end
 
-    it "should raise UnableToParseResults if files don't exist." do
+    it "should raise WhackerFailed if files don't exist." do
       expect{ Pinata::Ruby::Cane.whack(nil) }.to raise_error(Pinata::WhackerFailed)
+    end
+
+    it "should not raise an error if no results are found" do
+      result = Pinata::Ruby::Cane.whack(code_change_with_no_result)
+      result.outcome.should == 0
     end
   end
 end
