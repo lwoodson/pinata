@@ -4,12 +4,7 @@ module Pinata
     def whack_it!
       code_changes.each do |code_change|
         whacker = whacker_for(code_change)
-
-        unless whacker
-          skipped << code_change.current_filepath
-          next
-        end
-
+        next unless whacker
         whacker.start_whacking(code_change).each do |result|
           shift(result.outcome)
           improvements << result if result.improved?
@@ -53,7 +48,9 @@ module Pinata
 
     private
     def whacker_for(code_change)
-      Pinata::Filetypes.whacker_for(code_change)
+      Pinata::Filetypes.whacker_for(code_change).tap do |whacker|
+        skipped << code_change.current_filepath unless whacker
+      end
     end
 
     def code_changes
