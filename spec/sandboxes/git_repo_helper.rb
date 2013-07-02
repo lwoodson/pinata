@@ -37,6 +37,22 @@ EOS
       end
       commit_all('refactoring TennisMatch to suck')
     end
+
+    def create_new_file(name, contents)
+      File.open(name, 'w') do |file|
+        file.write(contents)
+      end
+      add(name)
+      commit_all('created #{name} file')
+    end
+
+    def update_file(name, contents)
+      File.open(name, 'w') do |file|
+        file.write(contents)
+      end
+      add(name)
+      commit_all('created #{name} file')
+    end
   end
 
   def in_sandbox(&block)

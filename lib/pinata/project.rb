@@ -3,7 +3,14 @@ module Pinata
   class Project
     def whack_it!
       code_changes.each do |code_change|
-        whacker_for(code_change).start_whacking(code_change).each do |result|
+        whacker = whacker_for(code_change)
+
+        unless whacker
+          skipped << code_change.current_filepath
+          next
+        end
+
+        whacker.start_whacking(code_change).each do |result|
           shift(result.outcome)
           improvements << result if result.improved?
           regressions << result if result.regressed?
@@ -28,12 +35,20 @@ module Pinata
       !regressions.empty?
     end
 
+    def has_skipped?
+      !skipped.empty? 
+    end
+
     def improvements
       @improvements ||= []
     end
 
     def regressions
       @regressions ||= []
+    end
+
+    def skipped
+      @skipped ||= []
     end
 
     private

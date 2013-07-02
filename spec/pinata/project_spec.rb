@@ -11,6 +11,22 @@ describe Pinata::Project do
           project = Pinata::Project.new
           project.whack_it!
           project.should_not have_changes
+          project.should_not have_skipped
+          project.should_not have_improved
+          project.should_not have_regressed
+          project.shift.should == 0
+        end
+      end
+    end
+
+    context "when encountering a code change to a file for which it has no whacker" do
+      it "should indicate that it skipped the file" do
+        in_sandbox do |git|
+          git.update_file('README.md', 'this is a readme file')
+          project = Pinata::Project.new
+          project.whack_it!
+          project.should have_changes
+          project.should have_skipped
           project.should_not have_improved
           project.should_not have_regressed
           project.shift.should == 0
@@ -25,6 +41,7 @@ describe Pinata::Project do
           project = Pinata::Project.new
           project.whack_it!
           project.should have_changes
+          project.should_not have_skipped
           project.should have_improved
           project.should_not have_regressed
           project.shift.should == 1
@@ -39,6 +56,7 @@ describe Pinata::Project do
           project = Pinata::Project.new
           project.whack_it!
           project.should have_changes
+          project.should_not have_skipped
           project.should have_regressed
           project.should_not have_improved
           project.shift.should == -1
@@ -54,6 +72,7 @@ describe Pinata::Project do
           project = Pinata::Project.new
           project.whack_it!
           project.should have_changes
+          project.should_not have_skipped
           project.should have_regressed
           project.should have_improved
           project.shift.should == 0
