@@ -44,12 +44,24 @@ describe Pinata::SCM::Git do
   end
 
   describe "#remote_content_of" do
-    it "should return the contents of the remote file" do
-      in_sandbox do |git|
-        expected = GitRepoHelper::BAD_PLAYER_CONTENTS
-        git.refactor_player_to_not_suck
-        contents = Pinata::SCM::Git.remote_contents_of('player.rb').should
-        contents.should == expected
+    context "when there is a remote version of the file" do
+      it "should return the contents of the remote file" do
+        in_sandbox do |git|
+          expected = GitRepoHelper::BAD_PLAYER_CONTENTS
+          git.refactor_player_to_not_suck
+          contents = Pinata::SCM::Git.remote_contents_of('player.rb')
+          contents.should == expected
+        end
+      end
+    end
+
+    context "when there is no remote version of the file" do
+      it "should return an empty string" do
+        in_sandbox do |git|
+          git.create_new_file('TODO', 'something')
+          contents = Pinata::SCM::Git.remote_contents_of('TODO')
+          contents.should == ''
+        end
       end
     end
   end

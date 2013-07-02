@@ -37,7 +37,8 @@ module Pinata
 
         private
         def contents_of(branch, file)
-          branch.gcommit.gtree.blobs[file].contents
+          blob = branch.gcommit.gtree.blobs[file]
+          blob ? blob.contents : ''
         end
 
         def local_branch
