@@ -25,5 +25,10 @@ describe Pinata::Ruby::Cane do
       result = Pinata::Ruby::Cane.whack(code_change_with_no_result)
       result.outcome.should == 0
     end
+
+    it "should correctly handle new files entering the project" do
+      result = Pinata::Ruby::Cane.whack(code_change_for_new_file)
+      result.outcome.should == -1
+    end
   end
 end
