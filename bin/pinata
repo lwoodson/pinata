@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+$: << '/home/lwoodson/Projects/pinata/lib'
+
+require 'pinata'
+project = Pinata::Project.new
+project.whack_it!
+reporter = Pinata::Reporters::Stream.new(project)
+reporter.make_report
