@@ -8,13 +8,22 @@ module Pinata
     def get_code_changes
       scm.modified_files.each_with_object([]) do |file, results|
         code_change = build_code_change_for(file)
-        copy(remote_contents_of(code_change), code_change.previous_dir, code_change.previous_filepath)
+        handle_remote(code_change)
         copy(local_contents_of(code_change), code_change.current_dir, code_change.current_filepath)
         results << code_change
       end
     end
 
     private
+    def handle_remote(code_change)
+      remote_contents = remote_contents_of(code_change)
+      if remote_contents.empty?
+        code_change.new_file = true
+      else
+        copy(remote_contents, code_change.previous_dir, code_change.previous_filepath)
+      end
+    end
+
     def remote_contents_of(code_change)
       scm.remote_contents_of(code_change.relative_filepath)
     end
