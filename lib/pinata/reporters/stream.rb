@@ -6,6 +6,7 @@ module Pinata
 
       def initialize(project, stream=STDOUT)
         @project = project
+        project.observe {|event| self.update(event)}
         @stream = stream
       end
 
@@ -16,7 +17,11 @@ module Pinata
         when :code_change
           display "Whacking #{event[:payload].relative_filepath}..."
         when :whacker
-          display "#{event[:payload].name.capitalize} takes a swing!"
+          if event[:payload]
+            display "#{event[:payload].name.capitalize} takes a swing!"
+          else
+            display "No appropriate whacker found at this party"
+          end
         else
           raise 'Unrecognized event'
         end

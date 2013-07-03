@@ -11,6 +11,10 @@ describe Pinata::Reporters::Stream do
     stream.read
   end
 
+  before do
+    project.stub(:observe)
+  end
+
   describe "#update" do
     context "when receiving an unrecognized event" do
       it "should raise an error" do
@@ -34,9 +38,17 @@ describe Pinata::Reporters::Stream do
       end
     end
 
-    context "when receiving a whacker event" do
+    context "when receiving a whacker event with module payload" do
       it "should write a message to stream" do
         reporter.update type: :whacker, payload: Pinata::Ruby::Cane 
+        output.should_not be_empty
+      end
+    end
+
+
+    context "when receiving a whacker event with nil payload" do
+      it "should write a message to stream" do
+        reporter.update type: :whacker, payload: nil
         output.should_not be_empty
       end
     end
