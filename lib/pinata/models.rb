@@ -32,7 +32,7 @@ module Pinata
   # whacker for some sort of code inspection tool.
   class ResultOfWhacking
     attr_reader :whacker
-    attr_accessor :outcome
+    attr_accessor :outcome, :previous_issues, :current_issues
 
     def initialize(whacker, code_change)
       @whacker = whacker
