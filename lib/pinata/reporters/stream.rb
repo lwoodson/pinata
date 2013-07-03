@@ -9,6 +9,19 @@ module Pinata
         @stream = stream
       end
 
+      def update(event)
+        case event[:type]
+        when :starting
+          display "Lining up..."
+        when :code_change
+          display "Whacking #{event[:payload].relative_filepath}..."
+        when :whacker
+          display "#{event[:payload].name.capitalize} takes a swing!"
+        else
+          raise 'Unrecognized event'
+        end
+      end
+
       def make_report
         if project.has_changes?
           if project.has_improved?

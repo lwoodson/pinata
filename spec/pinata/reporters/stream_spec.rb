@@ -11,6 +11,37 @@ describe Pinata::Reporters::Stream do
     stream.read
   end
 
+  describe "#update" do
+    context "when receiving an unrecognized event" do
+      it "should raise an error" do
+        expect{reporter.update type: :foo}.to raise_error
+      end
+    end
+
+    context "when receiving a starting event" do
+      it "should write message to stream" do
+        reporter.update type: :starting
+        output.should_not be_empty
+      end
+    end
+
+    context "when receiving a code_change event" do
+      it "should write message to stream" do
+        code_change = Pinata::CodeChange.new
+        code_change.relative_filepath = 'test.rb'
+        reporter.update type: :code_change, payload: code_change
+        output.should_not be_empty
+      end
+    end
+
+    context "when receiving a whacker event" do
+      it "should write a message to stream" do
+        reporter.update type: :whacker, payload: Pinata::Ruby::Cane 
+        output.should_not be_empty
+      end
+    end
+  end
+
   describe "#make_report" do
     context "when there are no code changes" do
       it "should report no code changes" do
