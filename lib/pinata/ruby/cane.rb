@@ -2,7 +2,7 @@ module Pinata
   module Ruby
     class Cane
       def self.whack(code_change)
-        ResultOfWhacking.new(self).tap do |result|
+        ResultOfWhacking.new(self, code_change).tap do |result|
           previous_violations = previous_violations_in(code_change)
           current_violations = whack_on(code_change.current_filepath)
           result.outcome = previous_violations <=> current_violations

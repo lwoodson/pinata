@@ -33,7 +33,8 @@ module Pinata
   class ResultOfWhacking
     attr_reader :whacker
     attr_accessor :outcome
-    def initialize(whacker)
+
+    def initialize(whacker, code_change)
       @whacker = whacker
     end
 
