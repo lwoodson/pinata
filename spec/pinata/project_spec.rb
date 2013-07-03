@@ -1,8 +1,81 @@
 require 'spec_helper'
 require 'sandboxes/git_repo_helper'
 
+class TestObserver
+  def update(event)
+    events << event
+  end
+
+  def events
+    @events ||= []
+  end
+end
+
+def type_filter(type)
+  lambda {|event| event[:type] == type}
+end
+
 describe Pinata::Project do
   include GitRepoHelper
+
+  describe "event emittance" do
+    let(:observer) {TestObserver.new}
+
+    it "should emit a single starting event" do
+      in_sandbox do
+        project = Pinata::Project.new
+        project.observe {|event| observer.update(event)}
+        project.whack_it!
+        observer.events.select(&type_filter(:starting)).size.should == 1
+      end
+    end
+
+    context "in a project with local changes" do
+      it "should emit code_change events" do
+        in_sandbox do |git|
+          git.refactor_player_to_not_suck
+          project = Pinata::Project.new
+          project.observe {|event| observer.update(event)}
+          project.whack_it!
+          events = observer.events.select(&type_filter(:code_change))
+          events.should_not be_empty
+          events.first[:payload].is_a?(Pinata::CodeChange).should == true
+        end
+      end
+
+      it "should emit whacker events" do
+        in_sandbox do |git|
+          git.refactor_player_to_not_suck
+          project = Pinata::Project.new
+          project.observe {|event| observer.update(event)}
+          project.whack_it!
+          events = observer.events.select(&type_filter(:whacker))
+          events.should_not be_empty
+          events.first[:payload].kind_of?(Module).should == true
+        end
+      end
+    end
+
+    context "in a project with no local change" do
+      it "should not emit code_change events" do
+        in_sandbox do |git|
+          project = Pinata::Project.new
+          project.observe {|event| observer.update(event)}
+          project.whack_it!
+          observer.events.select(&type_filter(:code_change)).should be_empty
+        end
+      end
+
+      it "should not emit whacker events" do
+        in_sandbox do |git|
+          project = Pinata::Project.new
+          project.observe {|event| observer.update(event)}
+          project.whack_it!
+          observer.events.select(&type_filter(:whacker)).should be_empty
+        end
+      end
+    end
+  end
 
   describe "public interface" do
     context "in a project with no local changes" do

@@ -2,8 +2,11 @@ module Pinata
   # Facade into the whole enchilada.
   class Project
     def whack_it!
+      notify(type: :starting)
       code_changes.each do |code_change|
+        notify(type: :code_change, payload: code_change)
         whacker = whacker_for(code_change)
+        notify(type: :whacker, payload: whacker)
         next unless whacker
         whacker.start_whacking(code_change).each do |result|
           shift(result.outcome)
@@ -11,6 +14,10 @@ module Pinata
           regressions << result if result.regressed?
         end
       end
+    end
+
+    def observe(&block)
+      observers << block
     end
 
     def shift(amt=0)
@@ -55,6 +62,14 @@ module Pinata
 
     def code_changes
       @code_changes ||= Pinata::Differ.new.get_code_changes
+    end
+
+    def observers
+      @observers ||= []
+    end
+
+    def notify(event)
+      observers.each {|observer| observer.call(event)}
     end
   end
 end
