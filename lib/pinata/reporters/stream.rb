@@ -11,20 +11,7 @@ module Pinata
       end
 
       def update(event)
-        case event[:type]
-        when :starting
-          display "Lining up..."
-        when :code_change
-          display "Whacking #{event[:payload].relative_filepath}..."
-        when :whacker
-          if event[:payload]
-            display "#{event[:payload].name.capitalize} takes a swing!"
-          else
-            display "No appropriate whacker found at this party"
-          end
-        else
-          raise 'Unrecognized event'
-        end
+        send(event[:type], event)
       end
 
       def make_report
@@ -46,6 +33,22 @@ module Pinata
       end
 
       private
+      def starting(event)
+        write "Lining up..."
+      end
+
+      def code_change(event)
+        write "Whacking #{event[:payload].relative_filepath}..."
+      end
+
+      def whacker(event)
+        if event[:payload]
+          write "#{event[:payload].name.capitalize} takes a swing!"
+        else
+          write "No appropriate whacker found at this party"
+        end
+      end
+
       def display(msg)
         output = <<-EOS
 PINATA REPORT
@@ -54,7 +57,11 @@ PINATA REPORT
 
 See https://github.com/lwoodson/pinata for more details.
         EOS
-        stream.write(output.strip)
+        write(output.strip)
+      end
+
+      def write(msg)
+        stream.write(msg)
       end
     end
   end
