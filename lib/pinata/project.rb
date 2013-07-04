@@ -10,6 +10,7 @@ module Pinata
         next unless whacker
         whacker.start_whacking(code_change).each do |result|
           shift(result.outcome)
+          raw_results << result
           improvements << result if result.improved?
           regressions << result if result.regressed?
         end
@@ -39,6 +40,10 @@ module Pinata
 
     def has_skipped?
       !skipped.empty? 
+    end
+
+    def raw_results
+      @raw_results ||= []
     end
 
     def improvements
