@@ -7,5 +7,5 @@ $:.unshift(path)
 require 'pinata'
 project = Pinata::Project.new
 project.whack_it!
-reporter = Pinata::Reporters::Stream.new(project)
+reporter = Pinata::Reporters::Default.new(project)
 reporter.make_report

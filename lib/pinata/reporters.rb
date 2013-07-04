@@ -1,1 +1,2 @@
-require 'pinata/reporters/stream'
+require 'pinata/reporters/base'
+require 'pinata/reporters/default'

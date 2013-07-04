@@ -1,10 +1,10 @@
 require 'spec_helper'
 require 'stringio'
 
-describe Pinata::Reporters::Stream do
+describe Pinata::Reporters::Default do
   let(:stream) {StringIO.new}
   let(:project) {double(Pinata::Project)}
-  let(:reporter) {Pinata::Reporters::Stream.new(project, stream)}
+  let(:reporter) {Pinata::Reporters::Default.new(project, stream)}
 
   def output
     stream.rewind
@@ -59,7 +59,7 @@ describe Pinata::Reporters::Stream do
       it "should report no code changes" do
         project.stub(:has_changes?) {false}
         reporter.make_report
-        output.scan(/No changes/).flatten.should_not be_empty
+        output.scan(/nothing here/).flatten.should_not be_empty
       end
     end
 
@@ -71,8 +71,7 @@ describe Pinata::Reporters::Stream do
           project.stub(:has_regressed?) {false}
           project.stub(:shift) {0}
           reporter.make_report
-          output.scan(/no improvement/).flatten.should_not be_empty
-          output.scan(/shift: (\d+)/).flatten.first.should == '0'
+          output.scan(/doesn't appear that you left any mark/).flatten.should_not be_empty
         end
       end
 
@@ -83,7 +82,6 @@ describe Pinata::Reporters::Stream do
           project.stub(:shift) {10}
           reporter.make_report
           output.scan(/code has improved/).flatten.should_not be_empty
-          output.scan(/shift: (\d+)/).flatten.first.should == '10'
         end
       end
 
@@ -94,8 +92,7 @@ describe Pinata::Reporters::Stream do
           project.stub(:has_regressed?) {true}
           project.stub(:shift) {-10}
           reporter.make_report
-          output.scan(/code has regressed/).flatten.should_not be_empty
-          output.scan(/shift: (-\d+)/).flatten.first.should == '-10'
+          output.scan(/code has degraded/).flatten.should_not be_empty
         end
       end
     end
