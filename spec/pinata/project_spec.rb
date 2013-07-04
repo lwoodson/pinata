@@ -88,6 +88,9 @@ describe Pinata::Project do
           project.should_not have_improved
           project.should_not have_regressed
           project.shift.should == 0
+          project.skipped.empty?.should be_true
+          project.improvements.empty?.should be_true
+          project.regressions.empty?.should be_true
         end
       end
     end
@@ -104,6 +107,9 @@ describe Pinata::Project do
             project.shift.should == 0
             project.should_not have_skipped
             project.should_not have_improved
+            project.skipped.empty?.should be_true
+            project.improvements.empty?.should be_true
+            project.regressions.empty?.should be_true
           end
         end
       end
@@ -119,6 +125,9 @@ describe Pinata::Project do
             (project.shift < 0).should == true
             project.should_not have_skipped
             project.should_not have_improved
+            project.skipped.empty?.should be_true
+            project.improvements.empty?.should be_true
+            project.regressions.empty?.should_not be_true
           end
         end
       end
@@ -135,6 +144,9 @@ describe Pinata::Project do
           project.should_not have_improved
           project.should_not have_regressed
           project.shift.should == 0
+          project.skipped.empty?.should_not be_true
+          project.improvements.empty?.should be_true
+          project.regressions.empty?.should be_true
         end
       end
     end
@@ -150,6 +162,9 @@ describe Pinata::Project do
           project.should have_improved
           project.should_not have_regressed
           project.shift.should == 1
+          project.skipped.empty?.should be_true
+          project.improvements.empty?.should_not be_true
+          project.regressions.empty?.should be_true
         end
       end
     end
@@ -165,6 +180,9 @@ describe Pinata::Project do
           project.should have_regressed
           project.should_not have_improved
           project.shift.should == -1
+          project.skipped.empty?.should be_true
+          project.regressions.empty?.should_not be_true
+          project.improvements.empty?.should be_true
         end
       end
     end
@@ -181,6 +199,9 @@ describe Pinata::Project do
           project.should have_regressed
           project.should have_improved
           project.shift.should == 0
+          project.skipped.empty?.should be_true
+          project.regressions.empty?.should_not be_true
+          project.improvements.empty?.should_not be_true
         end
       end
     end
