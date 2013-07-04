@@ -11,12 +11,12 @@ describe Pinata::ResultsTable do
     result.current_issues = 2
   end
 
-  describe "#each" do
+  describe "#each_row" do
     let(:table) {Pinata::ResultsTable.new(result)}
 
     it "should yield ResultRow for each ResultOfWhacking" do
       result_row = nil
-      table.each {|row| result_row = row}
+      table.each_row {|row| result_row = row}
       result_row.file.should == 'test.rb'
       result_row.whacker.kind_of?(Module).should == true
       result_row.outcome.should == 1

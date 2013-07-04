@@ -9,7 +9,11 @@ module Pinata
       @results = Array(results)
     end
 
-    def each(&block)
+    def column_names
+      %w[file whacker outcome previous current]
+    end
+
+    def each_row(&block)
       results.each do |result|
         row = ResultsRow.new(result.code_change.relative_filepath, result.whacker, result.outcome, result.previous_issues, result.current_issues)
         block.call(row)
