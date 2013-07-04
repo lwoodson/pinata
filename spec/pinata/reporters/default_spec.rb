@@ -1,15 +1,9 @@
 require 'spec_helper'
-require 'stringio'
 
 describe Pinata::Reporters::Default do
-  let(:stream) {StringIO.new}
+  include StreamSpecHelper
   let(:project) {double(Pinata::Project)}
   let(:reporter) {Pinata::Reporters::Default.new(project, stream)}
-
-  def output
-    stream.rewind
-    stream.read
-  end
 
   before do
     project.stub(:observe)

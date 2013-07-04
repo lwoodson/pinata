@@ -1,6 +1,7 @@
 require 'pinata'
 require 'pry'
 require 'tmpdir'
+require 'stringio'
 
 def source_file(name)
   File.join('spec', 'source', name)
@@ -36,4 +37,15 @@ end
 
 def code_change_for_new_file
   ruby_code_change(nil, 'elegant', new_file: true)
+end
+
+module StreamSpecHelper
+  def stream
+    @stream ||= StringIO.new
+  end
+
+  def output
+    stream.rewind
+    stream.read
+  end
 end
