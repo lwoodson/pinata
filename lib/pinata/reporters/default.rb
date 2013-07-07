@@ -16,9 +16,9 @@ module Pinata
           msg = "Looks like something popped out!  Lets take a look...\n"
           msg << "#{emoticon} #{description} (#{project.shift})"
         else
-          msg = "There is nothing here.  The pinata just dangles there mockingly"
+          msg = "There is nothing here. The pinata just dangles there mockingly."
         end
-        write(msg)
+        write("#{msg}\n")
       end
 
       private
