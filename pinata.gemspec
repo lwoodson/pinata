@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
   gem.add_dependency('git')
+  gem.add_dependency('text-table')
   gem.add_dependency('cane')
   gem.add_development_dependency('rspec-core')
   gem.add_development_dependency('rspec-expectations')

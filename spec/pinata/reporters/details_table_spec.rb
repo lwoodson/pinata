@@ -8,8 +8,13 @@ describe Pinata::Reporters::DetailsTable do
   shared_examples_for "table_reporter" do
     it "should output headers" do
       reporter.make_report
-      regex = /File\s+Whacker\s+Outcome\s+Previous\s+Current/
+      regex = /File.+Whacker.+Outcome.+Previous.+Current/
       output.scan(regex).flatten.should_not be_empty
+    end
+
+    it "should output totals" do
+      reporter.make_report
+      output.scan(/Totals.+\d+.+\d+.+\d+/).flatten.should_not be_empty
     end
   end
 
@@ -21,16 +26,6 @@ describe Pinata::Reporters::DetailsTable do
       end
 
       it_behaves_like "table_reporter"
-
-      it "should output totals" do
-        reporter.make_report
-        output.scan(/Totals\s+0\s+0\s+0/).flatten.should_not be_empty
-      end
-
-      it "should output no results" do
-        reporter.make_report
-        output.scan(/no results/).flatten.should_not be_empty
-      end
     end
 
     context "when there are changes" do
@@ -56,12 +51,7 @@ describe Pinata::Reporters::DetailsTable do
 
       it "should output a row for a whacker" do
         reporter.make_report
-        output.scan(/test\.rb\s+Pinata::Ruby::Cane/).flatten.should_not be_empty
-      end
-
-      it "should output totals" do
-        reporter.make_report
-        output.scan(/Totals\s+\d+\s+\d+\s+\d+/).flatten.should_not be_empty
+        output.scan(/test\.rb.+Pinata::Ruby::Cane/).flatten.should_not be_empty
       end
     end
   end
