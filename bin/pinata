@@ -4,8 +4,23 @@ file_path = Pathname.new(__FILE__).realpath
 path = File.expand_path(File.join('..', '..', 'lib'), file_path)
 $:.unshift(path)
 
+require 'slop'
 require 'pinata'
-project = Pinata::Project.new
-project.whack_it!
-reporter = Pinata::Reporters::Default.new(project)
-reporter.make_report
+
+opts = Slop.parse do
+  banner "Usage: pinata [options]"
+  on :h, :help, 'Print help info'
+  on :v, :verbose, 'Print a detailed report'
+end
+
+if opts.help?
+  puts opts
+else
+  project = Pinata::Project.new
+  project.whack_it!
+  Pinata::Reporters::Default.new(project).make_report
+
+  if opts.verbose?
+    Pinata::Reporters::DetailsTable.new(project).make_report
+  end
+end

@@ -16,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
+  gem.add_dependency('slop')
   gem.add_dependency('git')
   gem.add_dependency('text-table')
   gem.add_dependency('cane')
