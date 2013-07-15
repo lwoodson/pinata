@@ -9,7 +9,7 @@ module Pinata
       scm.modified_files.each_with_object([]) do |file, results|
         code_change = build_code_change_for(file)
         handle_remote(code_change)
-        copy(local_contents_of(code_change), code_change.current_dir, code_change.current_filepath)
+        copy(local_contents_of(code_change), code_change.current_filepath)
         results << code_change
       end
     end
@@ -20,7 +20,7 @@ module Pinata
       if remote_contents.empty?
         code_change.new_file = true
       else
-        copy(remote_contents, code_change.previous_dir, code_change.previous_filepath)
+        copy(remote_contents, code_change.previous_filepath)
       end
     end
 
@@ -32,15 +32,16 @@ module Pinata
       scm.local_contents_of(code_change.relative_filepath)
     end
 
-    def copy(contents, dir, path)
-      ensure_dir_exists(dir)
+    def copy(contents, path)
+      ensure_dir_exists(path)
       File.open(path, 'w') do |file|
         file.write(contents)
       end
     end
 
-    def ensure_dir_exists(dir)
-      FileUtils.mkdir_p(dir) unless Dir.exists?(dir)
+    def ensure_dir_exists(path)
+      dirs = path.split(File::SEPARATOR)[0..-2].join(File::SEPARATOR)
+      FileUtils.mkdir_p(dirs) unless dirs.empty?
     end
 
     def build_code_change_for(file)

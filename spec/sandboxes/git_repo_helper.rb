@@ -39,11 +39,17 @@ EOS
     end
 
     def create_new_file(name, contents)
+      mkdirs_for(name)
       File.open(name, 'w') do |file|
         file.write(contents)
       end
       add(name)
       commit_all('created #{name} file')
+    end
+
+    def mkdirs_for(name)
+      dirs = name.split(File::SEPARATOR)[0..-2].join(File::SEPARATOR)
+      FileUtils.mkdir_p(dirs) unless dirs.empty?
     end
 
     def update_file(name, contents)

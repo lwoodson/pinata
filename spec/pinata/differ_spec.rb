@@ -31,6 +31,13 @@ describe Pinata::Differ do
             result.should be_new_file
           end
         end
+
+        it "should work for files nested in subdirectories" do
+          in_sandbox do |git|
+            git.create_new_file('tmp/test.txt', 'test')
+            expect{ Pinata::Differ.new.get_code_changes}.to_not raise_error
+          end
+        end
       end
 
       context "to existing files in the project" do
