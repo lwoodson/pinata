@@ -41,6 +41,14 @@ describe Pinata::SCM::Git do
         contents.should == GitRepoHelper::GOOD_PLAYER_CONTENTS
       end
     end
+
+    it "should return the contents of the local file in a subdirectory" do
+      in_sandbox do |git|
+        git.create_new_file('test/test.rb', 'testing 1 2')
+        contents = Pinata::SCM::Git.local_contents_of('test/test.rb')
+        contents.should == 'testing 1 2' 
+      end
+    end
   end
 
   describe "#remote_content_of" do

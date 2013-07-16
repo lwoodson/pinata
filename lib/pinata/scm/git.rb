@@ -37,8 +37,16 @@ module Pinata
 
         private
         def contents_of(branch, file)
-          blob = branch.gcommit.gtree.blobs[file]
-          blob ? blob.contents : ''
+          recurse = lambda do |tree, file|
+            next_part, *remainder = file.split(File::SEPARATOR)
+            if remainder.empty?
+              blob = tree ? tree.blobs[next_part] : nil
+              blob ? blob.contents : ''
+            else
+              recurse.call(tree.subtrees[next_part], remainder.join(File::SEPARATOR))
+            end
+          end
+          recurse.call(branch.gcommit.gtree, file)
         end
 
         def local_branch
