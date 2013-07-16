@@ -22,8 +22,8 @@ module Pinata
           result.code_change.relative_filepath,
           result.whacker,
           result.outcome,
-          result.previous_issues,
-          result.current_issues
+          result.previous_issues.total,
+          result.current_issues.total
         ]
       end
 
@@ -42,11 +42,11 @@ module Pinata
       end
 
       def total_previous_issues_for(results)
-        results.inject(0) {|memo, result| memo += result.previous_issues}
+        results.inject(0) {|memo, result| memo += result.previous_issues.total}
       end
 
       def total_current_issues_for(results)
-        results.inject(0) {|memo, result| memo += result.current_issues}
+        results.inject(0) {|memo, result| memo += result.current_issues.total}
       end
     end
   end

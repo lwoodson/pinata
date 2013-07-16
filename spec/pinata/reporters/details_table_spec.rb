@@ -37,8 +37,8 @@ describe Pinata::Reporters::DetailsTable do
       let (:result) do
         Pinata::ResultOfWhacking.new(Pinata::Ruby::Cane, code_change).tap do |result|
           result.outcome = 0
-          result.previous_issues = 0
-          result.current_issues = 0
+          result.previous_issues = Pinata::Issues.new
+          result.current_issues = Pinata::Issues.new
         end
       end
 
