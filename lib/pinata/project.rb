@@ -39,7 +39,7 @@ module Pinata
     end
 
     def has_skipped?
-      !skipped.empty? 
+      !skipped.empty?
     end
 
     def raw_results
